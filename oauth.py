@@ -10,4 +10,4 @@ def get_auth():
 	)
 
 	print 'Hello, ' + client.get('/me').username + '!'
-	return
+	return client
