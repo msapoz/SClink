@@ -15,5 +15,5 @@ def upload_track( client, newTrack ):
 	print 'The secret URL is ' + track.permalink_url + '/' + track.secret_token
 
 def get_title ( newTrack ):
-	exp = re.compile('\A[\w-]*')
+	exp = re.compile('\A[\w-]*') #extract track title from file name, remove dot extension, currently cannot use '.' in filename
 	return exp.match(newTrack).group()
