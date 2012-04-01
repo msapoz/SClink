@@ -20,7 +20,7 @@ class Monitor:
 		self.obs.unschedule( self.stream )
 		self.obs.stop()
 
-monitor = Monitor() #create Monitor instance to import
+monitor = Monitor() 
 
 #soundcloud utilities
 import soundcloud
@@ -32,7 +32,7 @@ class SoundCloud:
 	def __init__( self, dir ):
 		self.dir = dir #specified music directory
 		
-	def upload_track( client, newTrack ):
+	def upload_track( self, client, newTrack ):
 		print dir + newTrack
 		track = client.post('/tracks', track={
     			'title': get_title( newTrack ) ,
@@ -42,8 +42,8 @@ class SoundCloud:
 		print track.title + ' has been posted!'
 		print 'The secret URL is ' + track.permalink_url + '/' + track.secret_token
 
-	def get_title ( newTrack ):
-		exp = re.compile('\A[\w-]*') #extract track title from file name, remove dot extension, currently cannot use '.' in filename
-		return exp.match(newTrack).group()
+	def get_title( self, newTrack ):
+		exp = re.compile( '[\w-]*\.' )
+		print exp.search( newTrack ).group().strip('.')
 
-#([\w.-]*$)
+sc = SoundCloud( '~/Music/' ) 

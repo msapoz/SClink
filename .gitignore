@@ -1,3 +1,7 @@
 #SClink files to ignore
 
 oauth_me.py
+.sclink.py.swp
+.utils.py.swp
+oauth_me.pyc
+utils.pyc
