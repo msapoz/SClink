@@ -1,3 +1,28 @@
+#soundcloud utilities
+import soundcloud
+import oauth_me
+import re
+import os
+
+SOURCE_PATH = os.path.expanduser('~/Music/')
+VALID_SUFFIX = '.mp3';
+
+class SoundCloud:
+
+	def __init__( self ):
+		self.client = oauth_me.get_auth()
+
+	def upload_track( self, newTrack ):
+		track = self.client.post('/tracks', track={
+    			'title': get_title(newTrack),
+    			'sharing': 'private',
+    			'asset_data': open(os.path.expanduser( newTrack ), 'rb')
+		})
+		print track.title + ' has been posted!'
+		print 'URL: ' + track.permalink_url + '/' + track.secret_token
+
+sc = SoundCloud()
+
 #fsevents class wrapper
 from fsevents import Observer, Stream
 
@@ -5,45 +30,24 @@ class Monitor:
 
 	def __init__( self ):
 		self.obs = Observer()
-		self.stream = Stream ( self.callback, 'test', file_events=True )
+		self.stream = Stream ( self.callback, SOURCE_PATH, file_events=True )
 
-	def callback( event ): #file event callback function
-		print event.name + ' changed'
+	def callback( self, event ): #file event callback function
+		if event.name.endswith( VALID_SUFFIX ) and os.path.isfile( event.name ):
+			sc.upload_track ( event.name )
 
 	def start( self ):
-		print "in start"
+		print "Starting monitor..."
 		self.obs.start()
 		self.obs.schedule( self.stream )
 
 	def stop( self ):
-		print "in stop"
+		print "Stopping monitor..."
 		self.obs.unschedule( self.stream )
 		self.obs.stop()
 
-monitor = Monitor() 
+monitor = Monitor()
 
-#soundcloud utilities
-import soundcloud
-import re
-import os
-
-class SoundCloud:
-
-	def __init__( self, dir ):
-		self.dir = dir #specified music directory
-		
-	def upload_track( self, client, newTrack ):
-		print dir + newTrack
-		track = client.post('/tracks', track={
-    			'title': get_title( newTrack ) ,
-    			'sharing': 'private',
-    			'asset_data': open(os.path.expanduser(dir + newTrack), 'rb')
-		})
-		print track.title + ' has been posted!'
-		print 'The secret URL is ' + track.permalink_url + '/' + track.secret_token
-
-	def get_title( self, newTrack ):
-		exp = re.compile( '[\w-]*\.' )
-		print exp.search( newTrack ).group().strip('.')
-
-sc = SoundCloud( '~/Music/' ) 
+def get_title( newTrack ):
+	exp = re.compile( '[\w-]*\.' )
+	return exp.search( newTrack ).group().strip('.')
