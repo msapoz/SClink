@@ -1,3 +1,4 @@
+# SoundCloud audio uploader
 Utility for automatically uploading and publishing songs to SoundCloud after they've been mixed down in a DAW.
 
 ## Usage
@@ -6,4 +7,5 @@ You can also override the VALID_SUFFIX if you don't mixdown in MP3. This is in p
 
 ## Dependencies
 [Python SoundCloud API Wrapper](https://github.com/soundcloud/soundcloud-python)
+
 [Python SoundCloud API Wrapper](https://github.com/soundcloud/soundcloud-python)
